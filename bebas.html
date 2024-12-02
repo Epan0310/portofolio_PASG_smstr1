@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Login</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f9;
+      }
+      .container {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: white;
+        width: 300px;
+      }
+      h2 {
+        text-align: center;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .message {
+        text-align: center;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Login</h2>
+      <div id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Username" required />
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Password"
+          required
+        />
+        <button onclick="login()">Login</button>
+        <p class="message" id="loginMessage"></p>
+      </div>
+      <div id="registerForm" style="display: none">
+        <h2>Daftar Akun</h2>
+        <input
+          type="text"
+          id="registerUsername"
+          placeholder="Username"
+          required
+        />
+        <input
+          type="password"
+          id="registerPassword"
+          placeholder="Password"
+          required
+        />
+        <button onclick="register()">Buat Akun</button>
+        <p class="message" id="registerMessage"></p>
+      </div>
+      <p
+        id="toggleForm"
+        style="text-align: center; color: blue; cursor: pointer"
+        onclick="toggleForm()"
+      >
+        Belum punya akun? Daftar di sini
+      </p>
+    </div>
+
+    <script>
+      // Cek apakah ada akun yang sudah terdaftar di localStorage
+      function userExists(username) {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        return users.find((user) => user.username === username);
+      }
+
+      // Fungsi untuk login
+      function login() {
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+        const user = userExists(username);
+
+        const loginMessage = document.getElementById("loginMessage");
+        if (user && user.password === password) {
+          loginMessage.style.color = "green";
+          loginMessage.textContent = `Selamat datang, ${username}!`;
+        } else if (user && user.password !== password) {
+          loginMessage.style.color = "red";
+          loginMessage.textContent = "Password salah.";
+        } else {
+          loginMessage.style.color = "red";
+          loginMessage.textContent =
+            "Username tidak ditemukan. Silakan daftar terlebih dahulu.";
+        }
+      }
+
+      // Fungsi untuk membuat akun baru
+      function register() {
+        const username = document.getElementById("registerUsername").value;
+        const password = document.getElementById("registerPassword").value;
+
+        if (userExists(username)) {
+          const registerMessage = document.getElementById("registerMessage");
+          registerMessage.style.color = "red";
+          registerMessage.textContent =
+            "Username sudah terdaftar, silakan pilih username lain.";
+        } else {
+          const users = JSON.parse(localStorage.getItem("users")) || [];
+          users.push({ username, password });
+          localStorage.setItem("users", JSON.stringify(users));
+
+          const registerMessage = document.getElementById("registerMessage");
+          registerMessage.style.color = "green";
+          registerMessage.textContent = "Akun berhasil dibuat! Silakan login.";
+          setTimeout(() => {
+            toggleForm(); // Arahkan ke form login setelah berhasil daftar
+          }, 2000);
+        }
+      }
+
+      // Fungsi untuk mengalihkan antara form login dan form daftar
+      function toggleForm() {
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+        const toggleText = document.getElementById("toggleForm");
+
+        if (loginForm.style.display === "none") {
+          loginForm.style.display = "block";
+          registerForm.style.display = "none";
+          toggleText.textContent = "Belum punya akun? Daftar di sini";
+        } else {
+          loginForm.style.display = "none";
+          registerForm.style.display = "block";
+          toggleText.textContent = "Sudah punya akun? Login di sini";
+        }
+      }
+    </script>
+  </body>
+</html>
