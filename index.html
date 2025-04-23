@@ -221,7 +221,6 @@
         </div>
       </section>
 
-      <!-- Contact Us -->
       <section class="contact-section" id="kontak">
         <h2 class="section-title">Kontak</h2>
         <div class="section-content">
@@ -252,25 +251,40 @@
             </li>
           </ul>
 
-          <form action="#" class="contact-form">
+          <form
+            action="https://formspree.io/f/meogqgpy"
+            method="POST"
+            class="contact-form"
+          >
             <input
               type="text"
+              name="name"
               placeholder="Your name"
               class="form-input"
               required
             />
             <input
               type="email"
+              name="email"
               placeholder="Your email"
               class="form-input"
               required
             />
             <textarea
-              placeholder="Your massage"
+              name="message"
+              placeholder="Your message"
               class="form-input"
               required
             ></textarea>
-            <button class="submit-button">Submit</button>
+
+            <!-- Opsional: redirect ke halaman terima kasih -->
+            <input
+              type="hidden"
+              name="_next"
+              value="https://namakamu.github.io/thanks.html"
+            />
+
+            <button class="submit-button" type="submit">Submit</button>
           </form>
         </div>
       </section>
